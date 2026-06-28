@@ -179,28 +179,49 @@
     position: absolute;
     top: 12px;
     right: 14px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: #aaa;
-    width: 30px;
-    height: 30px;
+    background: rgba(233,69,96,0.2);
+    border: 2px solid rgba(233,69,96,0.5);
+    color: #e94560;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 15px;
-    transition: all 0.25s;
+    font-size: 20px;
+    transition: all 0.3s;
     z-index: 5;
     line-height: 1;
     padding: 0;
     min-width: unset;
+    animation: pulse-gear 2s infinite;
   }
   .settings-toggle:hover {
-    background: rgba(255,255,255,0.15);
+    background: rgba(233,69,96,0.4);
     color: #fff;
-    transform: rotate(90deg);
+    transform: rotate(90deg) scale(1.1);
   }
+  @keyframes pulse-gear {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(233,69,96,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(233,69,96,0); }
+  }
+  .settings-prompt {
+    position: absolute;
+    top: -8px;
+    right: 56px;
+    background: rgba(233,69,96,0.15);
+    border: 1px solid rgba(233,69,96,0.3);
+    border-radius: 10px;
+    padding: 6px 14px;
+    color: #e94560;
+    font-size: 13px;
+    z-index: 5;
+    white-space: nowrap;
+    animation: pulse-prompt 2s infinite;
+    font-weight: 600;
+  }
+  .settings-prompt.hidden { display: none; }
   .settings-panel {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -242,6 +263,7 @@
 </head>
 <body>
 <div class="game-container" id="gameContainer">
+  <div class="settings-prompt" id="settingsPrompt">⭐ 点击设置调整难度 ⚙</div>
   <div class="settings-toggle" id="settingsToggle" title="设置">⚙</div>
   <div class="left-col">
     <h1>🧱 俄罗斯方块<span class="sub">Classic Tetris</span></h1>
@@ -708,9 +730,9 @@
 
   function update() {
     if (state !== 'running') return;
-    dropCounter += dropInterval;
-    if (dropCounter >= 1000) {
-      dropCounter -= 1000;
+    dropCounter += 50;
+    if (dropCounter >= dropInterval) {
+      dropCounter -= dropInterval;
       if (isValid(currentPiece, currentX, currentY + 1)) {
         currentY++;
         draw();
@@ -800,6 +822,7 @@
 
   // --- Settings ---
   settingsToggle.addEventListener('click', function() {
+    document.getElementById('settingsPrompt').classList.add('hidden');
     if (state === 'running') togglePause();
     applySettingsUI();
     settingsPanel.classList.add('open');
@@ -889,6 +912,19 @@
 
   loadSettings();
   applySettingsUI();
+  (function(){
+    try {
+      if (!localStorage.getItem('tetris_visited')) {
+        localStorage.setItem('tetris_visited', '1');
+        setTimeout(function(){
+          settingsPanel.classList.add('open');
+          document.getElementById('settingsPrompt').classList.add('hidden');
+        }, 500);
+      } else {
+        document.getElementById('settingsPrompt').classList.add('hidden');
+      }
+    } catch(e){}
+  })();
   init();
 })();
 </script>
