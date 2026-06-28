@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>?? 贪吃蛇游戏</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+  .game-container {
+    background: #16213e;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  h1 { color: #e94560; font-size: 28px; margin-bottom: 20px; letter-spacing: 2px; }
+  canvas { border: 2px solid #e94560; border-radius: 8px; background: #0f3460; display: block; margin: 0 auto; }
+  .score-board { display: flex; justify-content: space-between; margin: 15px 0; padding: 0 10px; }
+  .score { color: #fff; font-size: 18px; }
+  .score span { color: #e94560; font-weight: bold; font-size: 22px; }
+  .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+  button { background: #e94560; color: #fff; border: none; padding: 10px 25px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  button:hover { background: #c73650; transform: scale(1.05); }
+  .game-over { color: #e94560; font-size: 20px; margin-top: 10px; display: none; }
+  .instructions { color: #aaa; font-size: 14px; margin-top: 10px; }
+  .instructions kbd { background: #0f3460; color: #fff; padding: 2px 8px; border-radius: 4px; border: 1px solid #555; }
+</style>
+</head>
+<body>
+<div class="game-container">
+  <h1>?? 贪吃蛇</h1>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
+  <div class="score-board">
+    <div class="score">分数: <span id="score">0</span></div>
+    <div class="score">最高分: <span id="highScore">0</span></div>
+  </div>
+  <div class="controls">
+    <button id="startBtn">? 开始游戏</button>
+    <button id="pauseBtn">? 暂停</button>
+    <button id="resetBtn">?? 重置</button>
+  </div>
+  <div class="game-over" id="gameOverMsg">?? 游戏结束!</div>
+  <div class="instructions">方向键 ↑ ↓ ← → 或 W A S D 控制方向 | 空格暂停</div>
+</div>
+<script>
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score'),highScoreEl=document.getElementById('highScore'),gameOverMsg=document.getElementById('gameOverMsg');
+const gs=20,tc=canvas.width/gs;
+let snake,food,dir,ndir,score,loop,state;
+function init(){
+  snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+  dir={x:1,y:0};ndir={x:1,y:0};score=0;state='idle';
+  scoreEl.textContent='0';gameOverMsg.style.display='none';
+  let p;do{p={x:Math.floor(Math.random()*tc),y:Math.floor(Math.random()*tc)}}while(snake.some(s=>s.x===p.x&&s.y===p.y));food=p;
+  draw();
+}
+function draw(){
+  ctx.fillStyle='#0f3460';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;
+  for(let i=0;i<=tc;i++){ctx.beginPath();ctx.moveTo(i*gs,0);ctx.lineTo(i*gs,canvas.height);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*gs);ctx.lineTo(canvas.width,i*gs);ctx.stroke();}
+  ctx.fillStyle='#e94560';ctx.shadowColor='#e94560';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.arc(food.x*gs+gs/2,food.y*gs+gs/2,gs/2-2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+  snake.forEach((s,i)=>{
+    const r=i/snake.length;ctx.fillStyle=`rgb(${Math.round(233-r*100)},${Math.round(69-r*30)},${Math.round(96-r*20)})`;
+    ctx.shadowColor=`rgba(233,69,96,${0.3-r*0.2})`;ctx.shadowBlur=8;
+    ctx.fillRect(s.x*gs+1,s.y*gs+1,gs-2,gs-2);
+    if(i===0){ctx.fillStyle='#fff';ctx.shadowBlur=0;const e=4;
+      if(dir.x===1){ctx.fillRect(s.x*gs+12,s.y*gs+5,e,e);ctx.fillRect(s.x*gs+12,s.y*gs+12,e,e)}
+      else if(dir.x===-1){ctx.fillRect(s.x*gs+4,s.y*gs+5,e,e);ctx.fillRect(s.x*gs+4,s.y*gs+12,e,e)}
+      else if(dir.y===-1){ctx.fillRect(s.x*gs+5,s.y*gs+4,e,e);ctx.fillRect(s.x*gs+12,s.y*gs+4,e,e)}
+      else{ctx.fillRect(s.x*gs+5,s.y*gs+12,e,e);ctx.fillRect(s.x*gs+12,s.y*gs+12,e,e)}}
+  });ctx.shadowBlur=0;
+}
+function update(){
+  dir={...ndir};const h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+  if(h.x===food.x&&h.y===food.y){score++;scoreEl.textContent=score;let p;do{p={x:Math.floor(Math.random()*tc),y:Math.floor(Math.random()*tc)}}while(snake.some(s=>s.x===p.x&&s.y===p.y));food=p;}
+  else snake.pop();
+  if(h.x<0||h.x>=tc||h.y<0||h.y>=tc||snake.some(s=>s.x===h.x&&s.y===h.y)){state='gameover';clearInterval(loop);gameOverMsg.style.display='block';const ph=parseInt(localStorage.getItem('snakeHighScore')||'0');if(score>ph){localStorage.setItem('snakeHighScore',score);highScoreEl.textContent=score}return;}
+  snake.unshift(h);draw();
+}
+function start(){if(state==='idle'||state==='gameover')init();if(state!=='running'){state='running';loop=setInterval(update,120)}}
+function pause(){if(state==='running'){clearInterval(loop);state='paused';document.querySelector('.controls button:nth-child(2)').textContent='? 继续'}
+  else if(state==='paused'){state='running';loop=setInterval(update,120);document.querySelector('.controls button:nth-child(2)').textContent='? 暂停'}}
+function reset(){clearInterval(loop);state='idle';document.querySelector('.controls button:nth-child(2)').textContent='? 暂停';init()}
+document.addEventListener('keydown',e=>{const k=e.key;e.preventDefault();
+  if(state==='idle'||state==='gameover'){if(k==='Enter'||k===' ')start();return}
+  const n={x:0,y:0};
+  switch(k){case'ArrowUp':case'w':case'W':n.y=-1;break;case'ArrowDown':case's':case'S':n.y=1;break;case'ArrowLeft':case'a':case'A':n.x=-1;break;case'ArrowRight':case'd':case'D':n.x=1;break;case' ':pause();return;default:return}
+  if(n.x!==-dir.x||n.y!==-dir.y)ndir=n});
+document.getElementById('startBtn').onclick=start;
+document.querySelector('.controls button:nth-child(2)').onclick=pause;
+document.getElementById('resetBtn').onclick=reset;
+let tx,ty;canvas.addEventListener('touchstart',e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY});
+canvas.addEventListener('touchend',e=>{if(!tx||!ty)return;const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty,adx=Math.abs(dx),ady=Math.abs(dy);if(Math.max(adx,ady)<20)return;const n={x:0,y:0};if(adx>ady)n.x=dx>0?1:-1;else n.y=dy>0?1:-1;if(n.x!==-dir.x||n.y!==-dir.y)ndir=n;tx=ty=null});
+const sh=localStorage.getItem('snakeHighScore');if(sh)highScoreEl.textContent=sh;init();
+</script>
+</body>
+</html>
