@@ -137,8 +137,10 @@
     flex-direction: column;
     z-index: 10;
     backdrop-filter: blur(4px);
+    cursor: pointer;
   }
   .game-over-overlay.show { display: flex; }
+  .game-over-overlay > * { cursor: default; }
   .game-over-text {
     color: #e94560;
     font-size: 36px;
@@ -159,6 +161,14 @@
     display: none;
   }
   .game-over-new-record.show { display: block; }
+  .game-over-message {
+    color: #ffd700;
+    font-size: 15px;
+    margin: 4px 0 10px;
+    min-height: 22px;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255,215,0,0.3);
+  }
   .instructions {
     color: #777;
     font-size: 11px;
@@ -256,8 +266,8 @@
     .right-col { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; min-width: unset; width: 100%; }
     .info-box { margin-bottom: 0; padding: 8px; }
     .right-col .info-box { flex: 1; min-width: 60px; }
-    canvas#boardCanvas { width: 240px; height: 480px; }
-    canvas#nextCanvas { width: 72px; height: 72px; }
+    canvas#boardCanvas { width: 280px; height: 560px; }
+    canvas#nextCanvas { width: 90px; height: 90px; }
   }
 </style>
 </head>
@@ -267,7 +277,7 @@
   <div class="settings-toggle" id="settingsToggle" title="设置">⚙</div>
   <div class="left-col">
     <h1>🧱 俄罗斯方块<span class="sub">Classic Tetris</span></h1>
-    <canvas id="boardCanvas" width="300" height="600"></canvas>
+    <canvas id="boardCanvas" width="360" height="720"></canvas>
     <div class="controls">
       <button id="startBtn">▶ 开始游戏</button>
       <button id="pauseBtn" class="secondary">⏸ 暂停</button>
@@ -292,7 +302,7 @@
       <div class="value" id="highScore">0</div>
     </div>
     <div class="next-label">⬇ 下一个</div>
-    <canvas id="nextCanvas" width="120" height="120"></canvas>
+    <canvas id="nextCanvas" width="144" height="144"></canvas>
     <div class="instructions" style="margin-top:10px;">
       <kbd>←</kbd><kbd>→</kbd> 移动 &nbsp; <kbd>↑</kbd> 旋转 &nbsp; <kbd>↓</kbd> 加速<br>
       <kbd>Space</kbd> 硬降 &nbsp; <kbd>P</kbd> 暂停 &nbsp; 点击「开始」重开
@@ -301,20 +311,20 @@
   <div class="game-over-overlay" id="gameOverOverlay">
     <div class="game-over-text">💀 游戏结束</div>
     <div class="game-over-score">得分: <span id="finalScore">0</span></div>
-    <div class="game-over-new-record" id="newRecordBadge">🏆 新纪录！</div>
-    <p style="color:#888;font-size:13px;margin-top:4px;margin-bottom:10px;">点击下方「开始游戏」重新开局</p>
+    <div class="game-over-message" id="gameOverMessage">👊</div>
+    <div class="game-over-new-record" id="newRecordBadge">🏆 新纪录！</div>    <p style="color:#888;font-size:13px;margin:6px 0 8px;">点击该区域关闭，然后点「开始游戏」重开</p>
   </div>
   <div class="settings-panel" id="settingsPanel">
     <div class="settings-title">⚙ 游戏设置</div>
     <div class="setting-group">
       <div class="setting-label">📦 初始等级 <span id="levelValueLabel">1</span></div>
       <div class="setting-options" id="levelOptions">
-        <div class="setting-option active" data-level="0">🍼 新手<br><small>0</small></div>
-        <div class="setting-option" data-level="1">⚡ 普通<br><small>1</small></div>
-        <div class="setting-option" data-level="3">🔥 高手<br><small>3</small></div>
-        <div class="setting-option" data-level="5">💀 地狱<br><small>5</small></div>
+        <div class="setting-option active" data-level="0">🍼 新手<br><small>300ms</small></div>
+        <div class="setting-option" data-level="1">⚡ 普通<br><small>250ms</small></div>
+        <div class="setting-option" data-level="3">🔥 高手<br><small>150ms</small></div>
+        <div class="setting-option" data-level="5">💀 地狱<br><small>80ms</small></div>
       </div>
-      <div class="setting-desc">等级越高，方块下落速度越快</div>
+      <div class="setting-desc">等级越高 方块下落越快 新手300ms 地狱80ms</div>
     </div>
     <div class="setting-group">
       <div class="setting-label">👻 预测线 <span id="ghostValueLabel">显示</span></div>
@@ -330,7 +340,7 @@
 <script>
 (function(){
   // --- Constants ---
-  var COLS = 10, ROWS = 20, BS = 30;
+  var COLS = 10, ROWS = 20, BS = 36;
   var boardCanvas = document.getElementById('boardCanvas');
   var boardCtx = boardCanvas.getContext('2d');
   var nextCanvas = document.getElementById('nextCanvas');
@@ -358,31 +368,31 @@
   var PIECES = [
     { // I
       shape: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
-      color: '#00f0f0'
+      color: '#4dd0e1'
     },
     { // O
       shape: [[1,1],[1,1]],
-      color: '#f0f000'
+      color: '#ffd740'
     },
     { // T
       shape: [[0,1,0],[1,1,1],[0,0,0]],
-      color: '#a000f0'
+      color: '#b39ddb'
     },
     { // S
       shape: [[0,1,1],[1,1,0],[0,0,0]],
-      color: '#00f000'
+      color: '#81c784'
     },
     { // Z
       shape: [[1,1,0],[0,1,1],[0,0,0]],
-      color: '#f00000'
+      color: '#e94560'
     },
     { // J
       shape: [[1,0,0],[1,1,1],[0,0,0]],
-      color: '#0000f0'
+      color: '#64b5f6'
     },
     { // L
       shape: [[0,0,1],[1,1,1],[0,0,0]],
-      color: '#f0a000'
+      color: '#ffb74d'
     }
   ];
 
@@ -398,9 +408,9 @@
 
   // Speed per level (ms)
   function getSpeed(lvl) {
-    var speeds = [800, 720, 630, 550, 470, 380, 300, 220, 140, 100, 80, 60, 50, 40];
-    if (lvl <= 0) return 800;
-    if (lvl >= speeds.length) return 40;
+    var speeds = [300, 250, 190, 150, 110, 80, 55, 40, 28, 21, 16, 11, 8, 6];
+    if (lvl <= 0) return speeds[0];
+    if (lvl >= speeds.length) return speeds[speeds.length-1];
     return speeds[lvl];
   }
 
@@ -408,7 +418,7 @@
     try {
       var s = JSON.parse(localStorage.getItem('tetrisSettings_v1'));
       if (s) {
-        startLevel = s.startLevel || 1;
+        startLevel = s.startLevel != null ? s.startLevel : 1;
         showGhost = s.showGhost !== false;
       }
     } catch(e) {}
@@ -617,26 +627,31 @@
   function drawBlock(ctx, x, y, color, size, ghost) {
     if (ghost) {
       ctx.strokeStyle = color;
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 2;
       ctx.globalAlpha = 0.3;
-      ctx.strokeRect(x + 1, y + 1, size - 2, size - 2);
+      ctx.setLineDash([3, 3]);
+      ctx.strokeRect(x + 2, y + 2, size - 4, size - 4);
+      ctx.setLineDash([]);
       ctx.globalAlpha = 1;
       return;
     }
-    // Fill
+    var r = 3;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + size - r, y);
+    ctx.quadraticCurveTo(x + size, y, x + size, y + r);
+    ctx.lineTo(x + size, y + size - r);
+    ctx.quadraticCurveTo(x + size, y + size, x + size - r, y + size);
+    ctx.lineTo(x + r, y + size);
+    ctx.quadraticCurveTo(x, y + size, x, y + size - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
     ctx.fillStyle = color;
-    ctx.shadowColor = color;
-    ctx.shadowBlur = 4;
-    ctx.fillRect(x + 1, y + 1, size - 2, size - 2);
-    ctx.shadowBlur = 0;
-    // Highlight
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.fillRect(x + 1, y + 1, size - 2, 3);
-    ctx.fillRect(x + 1, y + 1, 3, size - 2);
-    // Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(x + size - 3, y + 1, 2, size - 2);
-    ctx.fillRect(x + 1, y + size - 3, size - 2, 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
   }
 
   function draw() {
@@ -703,13 +718,13 @@
 
   function drawNext() {
     var nc = nextCanvas;
-    nextCtx.fillStyle = '#0f3460';
+    nextCtx.fillStyle = '#0a1a30';
     nextCtx.fillRect(0, 0, nc.width, nc.height);
 
     var shape = nextPiece.shape;
     var rows = shape.length;
     var cols = shape[0].length;
-    var cellSize = 24;
+    var cellSize = 28;
     var ox = (nc.width - cols * cellSize) / 2;
     var oy = (nc.height - rows * cellSize) / 2;
 
@@ -719,10 +734,10 @@
           var x = ox + c * cellSize;
           var y = oy + r * cellSize;
           nextCtx.fillStyle = nextPiece.color;
-          nextCtx.shadowColor = nextPiece.color;
-          nextCtx.shadowBlur = 5;
           nextCtx.fillRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
-          nextCtx.shadowBlur = 0;
+          nextCtx.strokeStyle = 'rgba(0,0,0,0.15)';
+          nextCtx.lineWidth = 1;
+          nextCtx.strokeRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
         }
       }
     }
@@ -749,9 +764,23 @@
     clearInterval(loop);
     finalScoreEl.textContent = score;
     document.querySelector('.game-over-text').textContent = '💀 游戏结束';
+    
+  var msgs = [];
+  if (score <= 100) {
+    msgs = ["💪 方块新手，欢迎入坑！", "🌟 还不错，再练练就无敌了！", "😊 别气馁，大家都是这样走过来的！"];
+  } else if (score <= 500) {
+    msgs = ["🔥 有热度了！继续加油！", "🎯 运气不错，技术也很好！", "🚀 冲榜中，请继续！"];
+  } else if (score <= 1500) {
+    msgs = ["😎 方块大师！这波操作很稳！", "👊 厉害了！这屏幕都要被你玩爆了！", "🌟 战况越来越好！"];
+  } else if (score <= 4000) {
+    msgs = ["🤩 高手过招，招招致命！", "⚡ 这可以去参赛了！", "👑 大神级别！受我一拜！"];
+  } else {
+    msgs = ["👾 你是不是开GUI了？", "🌟 传说级别！方块界的天花板！", "🏆 这屏幕值得保留下来！"];
+  }
+  document.getElementById("gameOverMessage").textContent = msgs[Math.floor(Math.random() * msgs.length)];
     if (score > highScore) {
       highScore = score;
-      localStorage.setItem('tetrisHighScore_v1', String(highScore));
+      localStorage.setItem('tetrisHighScore_v5', String(highScore));
       highScoreEl.textContent = highScore;
       newRecordBadge.classList.add('show');
       highScoreEl.style.color = '#ffd700';
@@ -797,8 +826,16 @@
     document.querySelector('.game-over-text').textContent = '💀 游戏结束';
     newRecordBadge.classList.remove('show');
     gameOverOverlay.classList.remove('show');
+    // Reset high score cache on reset
+    try { localStorage.removeItem('tetrisHighScore_v5'); localStorage.removeItem('tetris_v5_seen'); } catch(e){}
     init();
   }
+
+  document.getElementById('gameOverOverlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('show');
+    }
+  });
 
   function init() {
     board = createBoard();
@@ -815,7 +852,17 @@
 
     nextPiece = randomPiece();
     spawnPiece();
-    highScore = parseInt(localStorage.getItem('tetrisHighScore_v1') || '0');
+    (function(){
+    try {
+      if (!localStorage.getItem('tetris_v5_seen')) {
+        localStorage.removeItem('tetrisHighScore_v1');
+        localStorage.removeItem('tetrisHighScore_v4');
+        localStorage.removeItem('tetrisHighScore_v5');
+        localStorage.setItem('tetris_v5_seen', '1');
+      }
+    } catch(e){}
+  })();
+  highScore = parseInt(localStorage.getItem('tetrisHighScore_v5') || '0', 10) || 0;
     highScoreEl.textContent = highScore;
     draw();
   }
@@ -829,6 +876,11 @@
   });
   settingsCloseBtn.addEventListener('click', function() {
     saveSettings();
+    if (state === 'paused') {
+      level = Math.floor(lines / 10) + startLevel;
+      levelEl.textContent = level;
+      dropInterval = getSpeed(level);
+    }
     settingsPanel.classList.remove('open');
   });
   levelOptions.addEventListener('click', function(e) {
@@ -930,3 +982,4 @@
 </script>
 </body>
 </html>
+
