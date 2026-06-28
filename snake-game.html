@@ -117,8 +117,10 @@
     flex-direction: column;
     z-index: 10;
     backdrop-filter: blur(4px);
+    cursor: pointer;
   }
   .game-over-overlay.show { display: flex; }
+  .game-over-overlay > * { cursor: default; }
   .game-over-text {
     color: #e94560;
     font-size: 36px;
@@ -132,7 +134,7 @@
     margin-bottom: 8px;
   }
   .game-over-score span { color: #e94560; font-weight: bold; font-size: 28px; }
-  .game-over-new-record {
+  .game-over-message { color: #ffd700; font-size: 15px; margin: 4px 0 10px; min-height: 22px; font-weight: 600; text-shadow: 0 0 10px rgba(255,215,0,0.3); } .game-over-new-record {
     color: #ffd700;
     font-size: 16px;
     margin-bottom: 15px;
@@ -310,8 +312,9 @@
   <div class="game-over-overlay" id="gameOverOverlay">
     <div class="game-over-text">💀 游戏结束</div>
     <div class="game-over-score">得分: <span id="finalScore">0</span></div>
+    <div class="game-over-message" id="gameOverMessage">👊</div>
     <div class="game-over-new-record" id="newRecordBadge">🏆 新纪录！</div>
-    <p style="color:#888;font-size:13px;margin-top:4px;margin-bottom:10px;">点击下方「开始游戏」重新开局</p>
+    <p style="color:#888;font-size:13px;margin-top:4px;margin-bottom:10px;">点击该区域关闭，然后点「开始游戏」重开</p>
   </div>
   <div class="settings-panel" id="settingsPanel">
     <div class="settings-title">⚙ 游戏设置</div>
@@ -365,7 +368,7 @@
   var boundaryMode = 'wall';
   var pendingDir = null;
 
-  const SPEEDS = [180, 130, 90, 60];
+  const SPEEDS = [220, 170, 120, 80];
   const SPEED_NAMES = ['🐢 休闲', '⚡ 普通', '🔥 快速', '💀 地狱'];
   const FOOD_TYPES = [
     { color: '#e94560', glow: '#e94560', points: 1 },
@@ -384,7 +387,7 @@
   function loadSettings() {
     try {
       var saved = localStorage.getItem('snakeSettings_v4');
-      if (saved) { var s = JSON.parse(saved); speedLevel = s.speedLevel || 1; boundaryMode = s.boundaryMode || 'wall'; }
+      if (saved) { var s = JSON.parse(saved); speedLevel = s.speedLevel != null ? s.speedLevel : 1; boundaryMode = s.boundaryMode || 'wall'; }
     } catch(e) {}
   }
   function saveSettings() {
@@ -425,6 +428,12 @@
     return pos;
   }
 
+  document.getElementById('gameOverOverlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('show');
+    }
+  });
+
   function init() {
     var mid = Math.floor(TILE_COUNT / 2);
     snake = [
@@ -445,7 +454,7 @@
     updateSpeedDisplay();
     food = spawnFood();
     if (food) draw();
-    highScore = parseInt(localStorage.getItem('snakeHighScore_v4') || '0');
+    highScore = parseInt(localStorage.getItem('snakeHighScore_v5') || '0', 10) || 0;
     highScoreEl.textContent = highScore;
   }
 
@@ -569,9 +578,23 @@
     clearInterval(loop);
     finalScoreEl.textContent = score;
     document.querySelector('.game-over-text').textContent = win ? '🏆 你赢了！' : '💀 游戏结束';
+    
+  var msgs = [];
+  if (win) {
+    msgs = ["🎉 完美赛分！你把整个棋盘都吃光了！", "👑 蛇中之王非你莫属！", "🌟 这是我见过最厉害的蛇！"];
+  } else if (score <= 2) {
+    msgs = ["💪 万事开头难，再来一次！", "😊 别气馁，蛇也是这样走过来的！", "🌟 还不错，再练练就无敌了！"];
+  } else if (score <= 5) {
+    msgs = ["🔥 有热度了！再接再厉！", "🎯 准确度提升中，继续加油！", "📈 比上次进步了，很强！"];
+  } else if (score <= 10) {
+    msgs = ["👊 厉害了！这蛇被你烧得服服贴贴！", "😎 有点东西嘛！蛇大师！", "🚀 所向披靡，继续加油！"];
+  } else {
+    msgs = ["👑 大神级别！蛇王非你莫属！", "🤩 这操作还是人吗？", "⚡ 传说级蛇！蛇界的天花板！"];
+  }
+  document.getElementById("gameOverMessage").textContent = msgs[Math.floor(Math.random() * msgs.length)];
     if (score > highScore) {
       highScore = score;
-      localStorage.setItem('snakeHighScore_v4', String(highScore));
+      localStorage.setItem('snakeHighScore_v5', String(highScore));
       highScoreEl.textContent = highScore;
       newRecordBadge.classList.add('show');
       highScoreEl.style.color = '#ffd700';
