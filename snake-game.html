@@ -22,6 +22,7 @@
     text-align: center;
     position: relative;
     overflow: hidden;
+    width: 490px;
   }
   .game-container::before {
     content: '';
@@ -35,14 +36,14 @@
   }
   h1 {
     color: #e94560;
-    font-size: 30px;
-    margin-bottom: 20px;
+    font-size: 28px;
+    margin-bottom: 15px;
     letter-spacing: 3px;
     text-shadow: 0 0 20px rgba(233,69,96,0.5);
     position: relative;
   }
   h1 .sub {
-    font-size: 14px;
+    font-size: 13px;
     color: #888;
     letter-spacing: 1px;
     font-weight: normal;
@@ -61,38 +62,38 @@
   .score-board {
     display: flex;
     justify-content: space-between;
-    margin: 15px 0;
-    padding: 0 10px;
+    margin: 12px 0;
+    padding: 0 5px;
   }
   .score {
     color: #ccc;
-    font-size: 16px;
+    font-size: 15px;
   }
   .score span {
     color: #e94560;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 22px;
     text-shadow: 0 0 10px rgba(233,69,96,0.4);
   }
   .controls {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 15px;
+    margin-top: 10px;
   }
   button {
     background: linear-gradient(135deg, #e94560, #c73650);
     color: #fff;
     border: none;
-    padding: 10px 22px;
+    padding: 9px 18px;
     border-radius: 10px;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
     font-weight: 600;
-    min-width: 90px;
+    min-width: 80px;
   }
   button:hover {
     transform: translateY(-2px);
@@ -123,45 +124,152 @@
     font-size: 36px;
     font-weight: bold;
     text-shadow: 0 0 30px rgba(233,69,96,0.6);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .game-over-score {
     color: #fff;
     font-size: 18px;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
   }
   .game-over-score span { color: #e94560; font-weight: bold; font-size: 28px; }
+  .game-over-new-record {
+    color: #ffd700;
+    font-size: 16px;
+    margin-bottom: 15px;
+    display: none;
+  }
+  .game-over-new-record.show { display: block; }
   .instructions {
     color: #777;
-    font-size: 13px;
-    margin-top: 12px;
+    font-size: 12px;
+    margin-top: 10px;
     line-height: 1.8;
   }
   .instructions kbd {
     background: rgba(15,52,96,0.8);
     color: #ddd;
-    padding: 2px 10px;
+    padding: 2px 8px;
     border-radius: 5px;
     border: 1px solid #444;
     font-family: inherit;
+    font-size: 11px;
+  }
+  .settings-toggle {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #aaa;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.25s;
+    z-index: 5;
+    line-height: 1;
+    padding: 0;
+    min-width: unset;
+  }
+  .settings-toggle:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    transform: rotate(90deg);
+  }
+  .settings-panel {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10,10,26,0.92);
+    border-radius: 24px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 20;
+    backdrop-filter: blur(6px);
+    padding: 30px;
+  }
+  .settings-panel.open { display: flex; }
+  .settings-title {
+    color: #e94560;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 25px;
+  }
+  .setting-group {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 18px;
+  }
+  .setting-label {
+    color: #ccc;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .setting-label span { color: #e94560; font-weight: bold; }
+  .setting-options {
+    display: flex;
+    gap: 6px;
+  }
+  .setting-option {
+    flex: 1;
+    padding: 8px 4px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: #aaa;
     font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    font-family: inherit;
+  }
+  .setting-option:hover {
+    background: rgba(233,69,96,0.15);
+    border-color: rgba(233,69,96,0.3);
+    color: #fff;
+  }
+  .setting-option.active {
+    background: rgba(233,69,96,0.25);
+    border-color: #e94560;
+    color: #fff;
+    font-weight: 600;
+  }
+  .setting-desc {
+    color: #666;
+    font-size: 11px;
+    margin-top: 4px;
+    text-align: center;
+  }
+  .settings-close {
+    margin-top: 20px;
+    padding: 10px 40px;
   }
   .speed-indicator {
     color: #888;
-    font-size: 13px;
-    margin-top: 8px;
+    font-size: 12px;
+    margin-top: 6px;
   }
   .speed-indicator span { color: #e94560; }
-  @media (max-width: 500px) {
-    .game-container { padding: 15px; border-radius: 16px; }
+  @media (max-width: 520px) {
+    .game-container { padding: 15px; border-radius: 16px; width: 340px; }
     canvas { width: 300px; height: 300px; }
-    h1 { font-size: 22px; }
-    button { padding: 8px 14px; font-size: 13px; min-width: 70px; }
+    h1 { font-size: 20px; }
+    button { padding: 7px 12px; font-size: 12px; min-width: 60px; }
+    .settings-panel { padding: 20px; }
+    .setting-group { max-width: 260px; }
   }
 </style>
 </head>
 <body>
 <div class="game-container" id="gameContainer">
+  <div class="settings-toggle" id="settingsToggle" title="设置">⚙</div>
   <h1>🐍 贪吃蛇<span class="sub">Classic Snake Game</span></h1>
   <canvas id="gameCanvas" width="400" height="400"></canvas>
   <div class="score-board">
@@ -173,17 +281,39 @@
     <button id="pauseBtn" class="secondary">⏸ 暂停</button>
     <button id="resetBtn" class="secondary">🔄 重置</button>
   </div>
-  <div class="speed-indicator">⚡ 速度: <span id="speedDisplay">普通</span></div>
+  <div class="speed-indicator">⚡ 难度: <span id="speedDisplay">普通</span></div>
   <div class="instructions">
-    <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> 或 <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> 控制方向 &nbsp;|&nbsp; <kbd>Space</kbd> 暂停 &nbsp;|&nbsp; <kbd>Enter</kbd> 开始
+    <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> 或 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 控制 &nbsp;|&nbsp; <kbd>Space</kbd> 暂停 &nbsp;|&nbsp; 点击「开始游戏」重开
   </div>
   <div class="game-over-overlay" id="gameOverOverlay">
     <div class="game-over-text">💀 游戏结束</div>
     <div class="game-over-score">得分: <span id="finalScore">0</span></div>
-    <button id="restartBtn">🔄 再来一局</button>
+    <div class="game-over-new-record" id="newRecordBadge">🏆 新纪录！</div>
+    <p style="color:#888;font-size:13px;margin-top:4px;margin-bottom:10px;">点击下方「开始游戏」重新开局</p>
+  </div>
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-title">⚙ 游戏设置</div>
+    <div class="setting-group">
+      <div class="setting-label">🐍 移动速度 <span id="speedValueLabel">普通</span></div>
+      <div class="setting-options" id="speedOptions">
+        <div class="setting-option" data-speed="0">🐢 休闲<br><small>180ms</small></div>
+        <div class="setting-option active" data-speed="1">⚡ 普通<br><small>130ms</small></div>
+        <div class="setting-option" data-speed="2">🔥 快速<br><small>90ms</small></div>
+        <div class="setting-option" data-speed="3">💀 地狱<br><small>60ms</small></div>
+      </div>
+      <div class="setting-desc">速度越快，蛇移动越迅速，挑战性越高</div>
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">🌐 地图边界 <span id="boundaryValueLabel">有边界</span></div>
+      <div class="setting-options" id="boundaryOptions">
+        <div class="setting-option active" data-boundary="wall">🧱 有边界<br><small>撞墙死亡</small></div>
+        <div class="setting-option" data-boundary="wrap">🔄 穿墙<br><small>从另一侧出现</small></div>
+      </div>
+      <div class="setting-desc">穿墙模式让游戏更轻松，适合练习</div>
+    </div>
+    <button class="settings-close" id="settingsCloseBtn">✅ 确定</button>
   </div>
 </div>
-
 <script>
 (function(){
   const canvas = document.getElementById('gameCanvas');
@@ -191,25 +321,27 @@
   const scoreEl = document.getElementById('score');
   const highScoreEl = document.getElementById('highScore');
   const finalScoreEl = document.getElementById('finalScore');
+  const newRecordBadge = document.getElementById('newRecordBadge');
   const gameOverOverlay = document.getElementById('gameOverOverlay');
   const speedDisplay = document.getElementById('speedDisplay');
   const startBtn = document.getElementById('startBtn');
   const pauseBtn = document.getElementById('pauseBtn');
   const resetBtn = document.getElementById('resetBtn');
-  const restartBtn = document.getElementById('restartBtn');
+  const settingsToggle = document.getElementById('settingsToggle');
+  const settingsPanel = document.getElementById('settingsPanel');
+  const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+  const speedOptions = document.getElementById('speedOptions');
+  const boundaryOptions = document.getElementById('boundaryOptions');
+  const speedValueLabel = document.getElementById('speedValueLabel');
+  const boundaryValueLabel = document.getElementById('boundaryValueLabel');
 
   const GRID_SIZE = 20;
   const TILE_COUNT = canvas.width / GRID_SIZE;
-  const DIR = {
-    UP:    { x: 0, y: -1 },
-    DOWN:  { x: 0, y: 1 },
-    LEFT:  { x: -1, y: 0 },
-    RIGHT: { x: 1, y: 0 }
-  };
 
-  let snake, food, dir, nextDir, score, highScore, loop, state;
-  let speedLevel = 1;
-  let pendingDir = null;
+  var snake, food, dir, nextDir, score, highScore, loop, state;
+  var speedLevel = 1;
+  var boundaryMode = 'wall';
+  var pendingDir = null;
 
   const SPEEDS = [180, 130, 90, 60];
   const SPEED_NAMES = ['🐢 休闲', '⚡ 普通', '🔥 快速', '💀 地狱'];
@@ -219,78 +351,96 @@
     { color: '#00ff88', glow: '#00ff88', points: 5 }
   ];
 
+  // Rainbow hue palette for snake body
+  function hslColor(index, total) {
+    var hue = 340 + (index / Math.max(total, 1)) * 200; // 340(red) -> 180(cyan)
+    hue = hue % 360;
+    var lightness = 65 - (index / Math.max(total, 1)) * 15;
+    return 'hsl(' + Math.round(hue) + ', 80%, ' + Math.round(lightness) + '%)';
+  }
+
+  function loadSettings() {
+    try {
+      var saved = localStorage.getItem('snakeSettings_v4');
+      if (saved) { var s = JSON.parse(saved); speedLevel = s.speedLevel || 1; boundaryMode = s.boundaryMode || 'wall'; }
+    } catch(e) {}
+  }
+  function saveSettings() {
+    localStorage.setItem('snakeSettings_v4', JSON.stringify({ speedLevel: speedLevel, boundaryMode: boundaryMode }));
+  }
+
+  function applySettingsUI() {
+    var speedBtns = speedOptions.querySelectorAll('.setting-option');
+    speedBtns.forEach(function(btn, i) { btn.classList.toggle('active', i === speedLevel); });
+    speedValueLabel.textContent = SPEED_NAMES[speedLevel].replace(/[^\u4e00-\u9fff\w]/g,'');
+    var boundaryBtns = boundaryOptions.querySelectorAll('.setting-option');
+    boundaryBtns.forEach(function(btn) { btn.classList.toggle('active', btn.dataset.boundary === boundaryMode); });
+    boundaryValueLabel.textContent = boundaryMode === 'wall' ? '有边界' : '穿墙';
+    updateSpeedDisplay();
+  }
+
+  function updateSpeedDisplay() { speedDisplay.textContent = SPEED_NAMES[speedLevel]; }
+  function getCurrentSpeed() { return SPEEDS[speedLevel]; }
   function randomInt(max) { return Math.floor(Math.random() * max); }
 
   function getEmptyTile() {
-    const occupied = new Set(snake.map(s => `${s.x},${s.y}`));
-    const free = [];
-    for (let x = 0; x < TILE_COUNT; x++) {
-      for (let y = 0; y < TILE_COUNT; y++) {
-        if (!occupied.has(`${x},${y}`)) free.push({ x, y });
+    var occupied = {};
+    snake.forEach(function(s) { occupied[s.x + ',' + s.y] = true; });
+    var free = [];
+    for (var x = 0; x < TILE_COUNT; x++) {
+      for (var y = 0; y < TILE_COUNT; y++) {
+        if (!occupied[x + ',' + y]) free.push({ x: x, y: y });
       }
     }
-    if (free.length === 0) return null;
-    return free[randomInt(free.length)];
+    return free.length === 0 ? null : free[randomInt(free.length)];
   }
 
   function spawnFood() {
-    const pos = getEmptyTile();
+    var pos = getEmptyTile();
     if (!pos) return null;
-    const typeIdx = Math.random() < 0.85 ? 0 : (Math.random() < 0.6 ? 1 : 2);
-    return { ...pos, type: FOOD_TYPES[typeIdx] };
+    var typeIdx = Math.random() < 0.85 ? 0 : (Math.random() < 0.6 ? 1 : 2);
+    pos.type = FOOD_TYPES[typeIdx];
+    return pos;
   }
 
   function init() {
-    const mid = Math.floor(TILE_COUNT / 2);
+    var mid = Math.floor(TILE_COUNT / 2);
     snake = [
       { x: mid, y: mid },
       { x: mid - 1, y: mid },
       { x: mid - 2, y: mid }
     ];
-    dir = { ...DIR.RIGHT };
-    nextDir = { ...DIR.RIGHT };
+    dir = { x: 1, y: 0 };
+    nextDir = { x: 1, y: 0 };
     score = 0;
-    speedLevel = 1;
     state = 'idle';
     pendingDir = null;
     scoreEl.textContent = '0';
     finalScoreEl.textContent = '0';
+    newRecordBadge.classList.remove('show');
     gameOverOverlay.classList.remove('show');
     pauseBtn.textContent = '⏸ 暂停';
     updateSpeedDisplay();
-
     food = spawnFood();
     if (food) draw();
-    highScore = parseInt(localStorage.getItem('snakeHighScore_v2') || '0');
+    highScore = parseInt(localStorage.getItem('snakeHighScore_v4') || '0');
     highScoreEl.textContent = highScore;
-  }
-
-  function updateSpeedDisplay() {
-    speedDisplay.textContent = SPEED_NAMES[speedLevel];
-  }
-
-  function getCurrentSpeed() {
-    return SPEEDS[speedLevel];
   }
 
   function draw() {
     ctx.fillStyle = '#0f3460';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Subtle grid
     ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     ctx.lineWidth = 1;
-    for (let i = 0; i <= TILE_COUNT; i++) {
-      ctx.beginPath();
-      ctx.moveTo(i * GRID_SIZE, 0);
-      ctx.lineTo(i * GRID_SIZE, canvas.height);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(0, i * GRID_SIZE);
-      ctx.lineTo(canvas.width, i * GRID_SIZE);
-      ctx.stroke();
+    for (var i = 0; i <= TILE_COUNT; i++) {
+      ctx.beginPath(); ctx.moveTo(i * GRID_SIZE, 0); ctx.lineTo(i * GRID_SIZE, canvas.height); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, i * GRID_SIZE); ctx.lineTo(canvas.width, i * GRID_SIZE); ctx.stroke();
     }
 
-    const ft = food.type;
+    // Food
+    var ft = food.type;
     ctx.save();
     ctx.shadowColor = ft.glow;
     ctx.shadowBlur = 15;
@@ -299,7 +449,6 @@
     ctx.arc(food.x * GRID_SIZE + GRID_SIZE/2, food.y * GRID_SIZE + GRID_SIZE/2, GRID_SIZE/2 - 2, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-
     if (ft.points > 1) {
       ctx.strokeStyle = ft.glow;
       ctx.lineWidth = 2;
@@ -311,148 +460,109 @@
       ctx.shadowBlur = 0;
     }
 
-    for (let i = snake.length - 1; i >= 0; i--) {
-      const s = snake[i];
-      const ratio = i / Math.max(snake.length, 1);
-      const r = Math.round(233 - ratio * 120);
-      const g = Math.round(69 - ratio * 30);
-      const b = Math.round(96 - ratio * 20);
-
-      ctx.fillStyle = `rgb(${r},${g},${b})`;
-      ctx.shadowColor = `rgba(233,69,96,${0.3 - ratio * 0.25})`;
-      ctx.shadowBlur = i === 0 ? 10 : 6;
-      const pad = 1;
+    // Snake body with rainbow gradient
+    var total = snake.length;
+    for (var j = total - 1; j >= 0; j--) {
+      var s = snake[j];
+      var color = hslColor(j, total);
+      ctx.fillStyle = color;
+      ctx.shadowColor = 'rgba(233,69,96,' + (0.35 - (j / total) * 0.3) + ')';
+      ctx.shadowBlur = j === 0 ? 12 : 6;
+      var pad = 1;
       ctx.beginPath();
-      ctx.roundRect(s.x * GRID_SIZE + pad, s.y * GRID_SIZE + pad, GRID_SIZE - pad*2, GRID_SIZE - pad*2, i === 0 ? 6 : 4);
+      roundRect(ctx, s.x * GRID_SIZE + pad, s.y * GRID_SIZE + pad, GRID_SIZE - pad*2, GRID_SIZE - pad*2, j === 0 ? 6 : 3);
       ctx.fill();
 
-      if (i === 0) {
+      // Eyes on head
+      if (j === 0) {
         ctx.shadowBlur = 0;
         ctx.fillStyle = '#fff';
-        const eyeSize = 3;
-        let ex1, ey1, ex2, ey2;
-        if (dir.x === 1) {
-          ex1 = s.x * GRID_SIZE + 13; ey1 = s.y * GRID_SIZE + 5;
-          ex2 = s.x * GRID_SIZE + 13; ey2 = s.y * GRID_SIZE + 13;
-        } else if (dir.x === -1) {
-          ex1 = s.x * GRID_SIZE + 4; ey1 = s.y * GRID_SIZE + 5;
-          ex2 = s.x * GRID_SIZE + 4; ey2 = s.y * GRID_SIZE + 13;
-        } else if (dir.y === -1) {
-          ex1 = s.x * GRID_SIZE + 5; ey1 = s.y * GRID_SIZE + 4;
-          ex2 = s.x * GRID_SIZE + 13; ey2 = s.y * GRID_SIZE + 4;
-        } else {
-          ex1 = s.x * GRID_SIZE + 5; ey1 = s.y * GRID_SIZE + 13;
-          ex2 = s.x * GRID_SIZE + 13; ey2 = s.y * GRID_SIZE + 13;
-        }
-        ctx.beginPath();
-        ctx.arc(ex1, ey1, eyeSize, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(ex2, ey2, eyeSize, 0, Math.PI * 2);
-        ctx.fill();
-
+        var es = 3;
+        var ex1, ey1, ex2, ey2;
+        if (dir.x === 1) { ex1 = s.x * GRID_SIZE + 13; ey1 = s.y * GRID_SIZE + 5; ex2 = s.x * GRID_SIZE + 13; ey2 = s.y * GRID_SIZE + 13; }
+        else if (dir.x === -1) { ex1 = s.x * GRID_SIZE + 4; ey1 = s.y * GRID_SIZE + 5; ex2 = s.x * GRID_SIZE + 4; ey2 = s.y * GRID_SIZE + 13; }
+        else if (dir.y === -1) { ex1 = s.x * GRID_SIZE + 5; ey1 = s.y * GRID_SIZE + 4; ex2 = s.x * GRID_SIZE + 13; ey2 = s.y * GRID_SIZE + 4; }
+        else { ex1 = s.x * GRID_SIZE + 5; ey1 = s.y * GRID_SIZE + 13; ex2 = s.x * GRID_SIZE + 13; ey2 = s.y * GRID_SIZE + 13; }
+        ctx.beginPath(); ctx.arc(ex1, ey1, es, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex2, ey2, es, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#111';
-        const pupils = 1.5;
-        ctx.beginPath();
-        ctx.arc(ex1 + dir.x * 1, ey1 + dir.y * 1, pupils, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(ex2 + dir.x * 1, ey2 + dir.y * 1, pupils, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(ex1 + dir.x * 1, ey1 + dir.y * 1, 1.5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex2 + dir.x * 1, ey2 + dir.y * 1, 1.5, 0, Math.PI * 2); ctx.fill();
       }
     }
     ctx.shadowBlur = 0;
   }
 
-  if (!CanvasRenderingContext2D.prototype.roundRect) {
-    CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-      if (r > w/2) r = w/2;
-      if (r > h/2) r = h/2;
-      this.moveTo(x + r, y);
-      this.lineTo(x + w - r, y);
-      this.quadraticCurveTo(x + w, y, x + w, y + r);
-      this.lineTo(x + w, y + h - r);
-      this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      this.lineTo(x + r, y + h);
-      this.quadraticCurveTo(x, y + h, x, y + h - r);
-      this.lineTo(x, y + r);
-      this.quadraticCurveTo(x, y, x + r, y);
-      this.closePath();
-      return this;
-    };
+  function roundRect(ctx, x, y, w, h, r) {
+    if (r > w/2) r = w/2;
+    if (r > h/2) r = h/2;
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    return ctx;
+  }
+
+  function wrapCoord(v) {
+    if (v < 0) return TILE_COUNT - 1;
+    if (v >= TILE_COUNT) return 0;
+    return v;
   }
 
   function update() {
-    if (pendingDir) {
-      nextDir = pendingDir;
-      pendingDir = null;
-    }
-
+    if (pendingDir) { nextDir = pendingDir; pendingDir = null; }
     if ((dir.x === 0 || nextDir.x !== -dir.x) && (dir.y === 0 || nextDir.y !== -dir.y)) {
-      dir = { ...nextDir };
+      dir = { x: nextDir.x, y: nextDir.y };
     }
+    var head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-
-    if (head.x < 0 || head.x >= TILE_COUNT || head.y < 0 || head.y >= TILE_COUNT) {
-      gameOver();
-      return;
+    if (boundaryMode === 'wrap') {
+      head.x = wrapCoord(head.x);
+      head.y = wrapCoord(head.y);
+    } else {
+      if (head.x < 0 || head.x >= TILE_COUNT || head.y < 0 || head.y >= TILE_COUNT) { gameOver(); return; }
     }
-
-    if (snake.some(s => s.x === head.x && s.y === head.y)) {
-      gameOver();
-      return;
-    }
+    if (snake.some(function(s) { return s.x === head.x && s.y === head.y; })) { gameOver(); return; }
 
     snake.unshift(head);
-
     if (head.x === food.x && head.y === food.y) {
       score += food.type.points;
       scoreEl.textContent = score;
-
-      const newLevel = Math.min(3, Math.floor(score / 8));
-      if (newLevel !== speedLevel) {
-        speedLevel = newLevel;
-        updateSpeedDisplay();
-        clearInterval(loop);
-        state = 'running';
-        loop = setInterval(update, getCurrentSpeed());
-      }
-
       food = spawnFood();
-      if (!food) {
-        gameOver(true);
-        return;
-      }
+      if (!food) { gameOver(true); return; }
     } else {
       snake.pop();
     }
-
     draw();
   }
 
-  function gameOver(win = false) {
+  function gameOver(win) {
     state = 'gameover';
     clearInterval(loop);
     finalScoreEl.textContent = score;
-    if (win) {
-      document.querySelector('.game-over-text').textContent = '🏆 你赢了！';
-    } else {
-      document.querySelector('.game-over-text').textContent = '💀 游戏结束';
-    }
-    gameOverOverlay.classList.add('show');
-
+    document.querySelector('.game-over-text').textContent = win ? '🏆 你赢了！' : '💀 游戏结束';
     if (score > highScore) {
       highScore = score;
-      localStorage.setItem('snakeHighScore_v2', String(highScore));
+      localStorage.setItem('snakeHighScore_v4', String(highScore));
       highScoreEl.textContent = highScore;
+      newRecordBadge.classList.add('show');
       highScoreEl.style.color = '#ffd700';
-      setTimeout(() => { highScoreEl.style.color = ''; }, 1500);
+      setTimeout(function() { highScoreEl.style.color = ''; }, 2000);
+    } else {
+      newRecordBadge.classList.remove('show');
     }
+    gameOverOverlay.classList.add('show');
   }
 
   function startGame() {
-    if (state === 'idle' || state === 'gameover') {
+    // Only start/restart via this button — never auto-restart
+    if (state === 'gameover' || state === 'idle') {
       init();
     }
     if (state !== 'running') {
@@ -480,6 +590,8 @@
     state = 'idle';
     pauseBtn.textContent = '⏸ 暂停';
     document.querySelector('.game-over-text').textContent = '💀 游戏结束';
+    newRecordBadge.classList.remove('show');
+    gameOverOverlay.classList.remove('show');
     init();
   }
 
@@ -489,15 +601,44 @@
     }
   }
 
-  document.addEventListener('keydown', e => {
-    const key = e.key;
-    if (state === 'idle' || state === 'gameover') {
-      if (key === 'Enter' || key === ' ') {
-        e.preventDefault();
-        startGame();
-        return;
-      }
+  // Settings
+  settingsToggle.addEventListener('click', function() {
+    if (state === 'running') togglePause();
+    applySettingsUI();
+    settingsPanel.classList.add('open');
+  });
+  settingsCloseBtn.addEventListener('click', function() {
+    saveSettings();
+    updateSpeedDisplay();
+    settingsPanel.classList.remove('open');
+  });
+  speedOptions.addEventListener('click', function(e) {
+    var btn = e.target.closest('.setting-option');
+    if (!btn) return;
+    var idx = parseInt(btn.dataset.speed);
+    if (!isNaN(idx)) { speedLevel = idx; applySettingsUI(); }
+  });
+  boundaryOptions.addEventListener('click', function(e) {
+    var btn = e.target.closest('.setting-option');
+    if (!btn) return;
+    if (btn.dataset.boundary === 'wall' || btn.dataset.boundary === 'wrap') {
+      boundaryMode = btn.dataset.boundary; applySettingsUI();
     }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && settingsPanel.classList.contains('open')) {
+      applySettingsUI();
+      settingsPanel.classList.remove('open');
+    }
+  });
+
+  // Keyboard events
+  document.addEventListener('keydown', function(e) {
+    var key = e.key;
+    if (settingsPanel.classList.contains('open')) return;
+
+    // idle/gameover: Enter does NOT restart — only the button works
+    if (state === 'idle' || state === 'gameover') return;
 
     if (state !== 'running' && state !== 'paused') return;
 
@@ -513,42 +654,36 @@
   startBtn.addEventListener('click', startGame);
   pauseBtn.addEventListener('click', togglePause);
   resetBtn.addEventListener('click', resetGame);
-  restartBtn.addEventListener('click', startGame);
 
-  let touchStartX = 0, touchStartY = 0;
-  canvas.addEventListener('touchstart', e => {
-    const t = e.touches[0];
+  // Touch — no auto-start after gameover
+  var touchStartX = 0, touchStartY = 0;
+  canvas.addEventListener('touchstart', function(e) {
+    var t = e.touches[0];
     touchStartX = t.clientX;
     touchStartY = t.clientY;
-    if (state === 'idle' || state === 'gameover') {
-      e.preventDefault();
-      startGame();
-    }
-  }, { passive: false });
-
-  canvas.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-
-  canvas.addEventListener('touchend', e => {
+  }, { passive: true });
+  canvas.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+  canvas.addEventListener('touchend', function(e) {
+    if (state === 'idle' || state === 'gameover') return; // Must click button
     if (state !== 'running') return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - touchStartX;
-    const dy = t.clientY - touchStartY;
-    const adx = Math.abs(dx);
-    const ady = Math.abs(dy);
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    var adx = Math.abs(dx), ady = Math.abs(dy);
     if (Math.max(adx, ady) < 20) return;
-    if (adx > ady) {
-      handleDirection(dx > 0 ? 1 : -1, 0);
-    } else {
-      handleDirection(0, dy > 0 ? 1 : -1);
+    if (adx > ady) { handleDirection(dx > 0 ? 1 : -1, 0); }
+    else { handleDirection(0, dy > 0 ? 1 : -1); }
+  });
+
+  // R key reset
+  document.addEventListener('keydown', function(e) {
+    if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !settingsPanel.classList.contains('open')) {
+      resetGame();
     }
   });
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'r' || e.key === 'R') {
-      if (!e.ctrlKey && !e.metaKey) { resetGame(); }
-    }
-  });
-
+  loadSettings();
+  applySettingsUI();
   init();
 })();
 </script>
